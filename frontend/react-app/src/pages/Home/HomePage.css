@@ -1,0 +1,142 @@
+/* src/components/HomePage.css */
+body {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  margin: 0;
+  padding: 0;
+}
+
+.homepage-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  background: transparent; /* Transparente para mostrar o fundo do body */
+  border-radius: 8px;
+  color: #fff;
+}
+
+.homepage-container h1,
+.homepage-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.month-filter {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.month-filter label {
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
+}
+
+.month-filter input[type="month"] {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: none;
+  font-size: 1rem;
+}
+
+.month-filter button {
+  padding: 0.5rem 1rem;
+  margin-left: 0.5rem;
+  border: none;
+  background-color: #2575fc;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.month-filter button:hover {
+  background-color: #1a5bcc;
+}
+
+.stats-cards {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  padding: 1rem;
+  border-radius: 8px;
+  flex: 1 1 200px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  background-color: rgba(255,255,255,0.9);
+  color: #333;
+}
+
+.card h3 {
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.card.balance {
+  background-color: rgba(144,238,144,0.9);
+}
+
+.card.balance.negative {
+  background-color: rgba(255,182,193,0.9);
+}
+
+.income {
+  background-color: rgba(224,247,255,0.9);
+}
+
+.expense {
+  background-color: rgba(255,182,193,0.9);
+}
+
+.charts {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.chart-container {
+  margin: 2rem auto;
+  width: 600px;
+  height: 400px;
+  background: transparent; /* Sem fundo branco */
+}
+
+.chart-inner {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.homepage-loading {
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 2rem;
+  color: #fff;
+}
+
+/* Botão para apagar a conta */
+.delete-account-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.delete-account-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #FF0000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.delete-account-button:hover {
+  background-color: #CC0000;
+}

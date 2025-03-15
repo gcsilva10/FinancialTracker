@@ -1,0 +1,54 @@
+/* src/components/Navbar.css */
+.navbar {
+    background-color: #2575fc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+  }
+  
+  .navbar-brand {
+    color: #fff;
+    font-size: 1.8rem;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+  }
+  
+  .navbar-brand:hover {
+    transform: scale(1.05);
+  }
+  
+  .navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Adiciona alinhamento vertical para cada item */
+  .navbar-links li {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-links li a,
+  .navbar-links li button {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .navbar-links li a:hover,
+  .navbar-links li button:hover {
+    transform: scale(1.1);
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+  
