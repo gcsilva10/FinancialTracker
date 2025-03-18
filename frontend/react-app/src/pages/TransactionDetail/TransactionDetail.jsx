@@ -1,6 +1,9 @@
-// src/components/TransactionDetail.js
+// src/components/TransactionDetail/TransactionDetail.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import TransactionInfo from '../../components/TransactionDetail/TransactionInfo/TransactionInfo';
+import BackButton from '../../components/TransactionDetail/BackButton/BackButton';
+import DeleteButton from '../../components/TransactionDetail/DeleteButton/DeleteButton';
 import './TransactionDetail.css';
 
 function TransactionDetail() {
@@ -64,19 +67,13 @@ function TransactionDetail() {
     return <div className="transaction-detail-loading">Transação não encontrada.</div>;
   }
 
-  const formattedDate = new Date(transaction.date).toLocaleDateString('pt-PT');
-
   return (
     <div className="transaction-detail-container">
       <h1>Detalhes da Transação</h1>
-      <p><strong>Data:</strong> {formattedDate}</p>
-      <p><strong>Tipo:</strong> {transaction.type}</p>
-      <p><strong>Categoria:</strong> {transaction.category}</p>
-      <p><strong>Descrição:</strong> {transaction.description || '-'}</p>
-      <p><strong>Valor:</strong> {parseFloat(transaction.amount).toFixed(2)}</p>
+      <TransactionInfo transaction={transaction} />
       <div className="transaction-detail-buttons">
-        <button onClick={() => navigate(-1)} className="back-button">Voltar</button>
-        <button onClick={handleDelete} className="delete-button">Apagar Transação</button>
+        <BackButton onBack={() => navigate(-1)} />
+        <DeleteButton onDelete={handleDelete} />
       </div>
     </div>
   );

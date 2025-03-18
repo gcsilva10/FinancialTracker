@@ -1,24 +1,24 @@
-// src/components/TransactionList.js
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import FilterControls from '../../components/TransactionList/FilterControls/FilterControls';
+import TransactionTable from '../../components/TransactionList/TransactionTable/TransactionTable';
+import ExportImportControls from '../../components/TransactionList/ExportImportControls/ExportImportControls';
+import DeleteTransactionsButton from '../../components/TransactionList/DeleteTransactionsButton/DeleteTransactionsButton';
 import './TransactionList.css';
 
 function TransactionList() {
+  
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
 
-  // Estados para filtro e ordenação
+  // Estados para filtro, ordenação e seleção
   const [filterCriteria, setFilterCriteria] = useState('');
   const [filterValue, setFilterValue] = useState('');
   const [sortField, setSortField] = useState('');
   const [sortOrder, setSortOrder] = useState('');
-
-  // Estado para seleção de transações
   const [selectedIds, setSelectedIds] = useState([]);
-
-  // Ref para o input file (para importação)
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -45,14 +45,14 @@ function TransactionList() {
     fetchTransactions();
   }, [token]);
 
-  // Função para alternar seleção
+  // Alterna a seleção de uma transação
   const toggleSelect = (id) => {
     setSelectedIds(prev =>
       prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
     );
   };
 
-  // Função para apagar as transações selecionadas
+  // Apaga as transações selecionadas
   const deleteSelected = async () => {
     if (window.confirm("Tem certeza de que deseja excluir as transações selecionadas?")) {
       try {
@@ -87,7 +87,7 @@ function TransactionList() {
     }
   };
 
-  // Função de filtro
+  // Filtro
   const filteredTransactions = transactions.filter(transaction => {
     if (!filterCriteria || filterValue.trim() === '') return true;
     let fieldValue;
@@ -102,7 +102,7 @@ function TransactionList() {
     return fieldValue.toString().toLowerCase().includes(filterValue.toLowerCase());
   });
 
-  // Ordenação com ciclo: asc -> desc -> sem ordenação
+  // Ordenação
   const handleSort = (field) => {
     if (sortField !== field) {
       setSortField(field);
@@ -140,7 +140,12 @@ function TransactionList() {
     setFilterValue('');
   };
 
-  // Função para exportar dados para Excel
+  const clearFilter = () => {
+    setFilterCriteria('');
+    setFilterValue('');
+  };
+
+  // Exportação para Excel
   const handleExportExcel = async () => {
     try {
       const response = await fetch('/tracker/api/transactions/export/', {
@@ -165,12 +170,11 @@ function TransactionList() {
     }
   };
 
-  // Função para disparar o clique do input de arquivo
+  // Importação
   const handleImportButtonClick = () => {
     fileInputRef.current && fileInputRef.current.click();
   };
 
-  // Função para enviar o arquivo selecionado para importação
   const handleFileChange = async (e) => {
     const selectedFile = e.target.files[0];
     if (!selectedFile) return;
@@ -215,98 +219,32 @@ function TransactionList() {
   return (
     <div className="transaction-container">
       <h1>Minhas Transações</h1>
-      
-      <div className="filter-controls">
-        <span>Filtrar por:</span>
-        <button onClick={() => handleFilterClick('date')}>Data</button>
-        <button onClick={() => handleFilterClick('type')}>Tipo</button>
-        <button onClick={() => handleFilterClick('category')}>Categoria</button>
-        <button onClick={() => handleFilterClick('description')}>Descrição</button>
-        <button onClick={() => handleFilterClick('amount')}>Valor</button>
-        {filterCriteria && (
-          <>
-            <input
-              type="text"
-              placeholder={`Filtrar por ${filterCriteria}`}
-              value={filterValue}
-              onChange={(e) => setFilterValue(e.target.value)}
-            />
-            <button onClick={() => { setFilterCriteria(''); setFilterValue(''); }}>
-              Limpar Filtro
-            </button>
-          </>
-        )}
-      </div>
-
-      <table className="transaction-table">
-        <thead>
-          <tr>
-            <th>Selecionar</th>
-            <th onClick={() => handleSort('date')}>
-              Data {sortField === 'date' && (sortOrder === 'asc' ? '↑' : (sortOrder === 'desc' ? '↓' : ''))}
-            </th>
-            <th onClick={() => handleSort('type')}>
-              Tipo {sortField === 'type' && (sortOrder === 'asc' ? '↑' : (sortOrder === 'desc' ? '↓' : ''))}
-            </th>
-            <th onClick={() => handleSort('category')}>
-              Categoria {sortField === 'category' && (sortOrder === 'asc' ? '↑' : (sortOrder === 'desc' ? '↓' : ''))}
-            </th>
-            <th onClick={() => handleSort('description')}>
-              Descrição {sortField === 'description' && (sortOrder === 'asc' ? '↑' : (sortOrder === 'desc' ? '↓' : ''))}
-            </th>
-            <th onClick={() => handleSort('amount')}>
-              Valor {sortField === 'amount' && (sortOrder === 'asc' ? '↑' : (sortOrder === 'desc' ? '↓' : ''))}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedTransactions.map(transaction => (
-            <tr
-              key={transaction.id}
-              className={`transaction-row ${transaction.type}`}
-              onClick={() => navigate(`/transactions/${transaction.id}`)}
-              style={{ cursor: 'pointer' }}
-            >
-              <td onClick={(e) => e.stopPropagation()} style={{ textAlign: 'center' }}>
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={selectedIds.includes(transaction.id)}
-                    onChange={() => toggleSelect(transaction.id)}
-                  />
-                  <span className="custom-checkbox"></span>
-                </label>
-              </td>
-              <td>{transaction.date}</td>
-              <td>{transaction.type}</td>
-              <td>{transaction.category}</td>
-              <td>{transaction.description || '-'}</td>
-              <td>{parseFloat(transaction.amount).toFixed(2)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className="export-delete-container">
-        <button className="export-button" onClick={handleExportExcel}>
-          Exportar para Excel
-        </button>
-        <button className="import-button" onClick={handleImportButtonClick}>
-          Importar Excel
-        </button>
-        {selectedIds.length > 0 && (
-          <button className="delete-selected-button" onClick={deleteSelected}>
-            Apagar Transações Selecionadas
-          </button>
-        )}
-        <input
-          type="file"
-          accept=".xlsx"
-          ref={fileInputRef}
-          style={{ display: 'none' }}
-          onChange={handleFileChange}
-        />
-      </div>
+      <FilterControls 
+        filterCriteria={filterCriteria}
+        filterValue={filterValue}
+        onFilterClick={handleFilterClick}
+        onFilterChange={setFilterValue}
+        onClearFilter={clearFilter}
+      />
+      <TransactionTable 
+        transactions={sortedTransactions}
+        sortField={sortField}
+        sortOrder={sortOrder}
+        onSort={handleSort}
+        onRowClick={(id) => navigate(`/transactions/${id}`)}
+        toggleSelect={toggleSelect}
+        selectedIds={selectedIds}
+      />
+      <ExportImportControls 
+        onExportExcel={handleExportExcel}
+        onImportButtonClick={handleImportButtonClick}
+        fileInputRef={fileInputRef}
+        onFileChange={handleFileChange}
+      />
+      <DeleteTransactionsButton 
+        onDeleteSelected={deleteSelected}
+        selectedIds={selectedIds}
+      />
     </div>
   );
 }

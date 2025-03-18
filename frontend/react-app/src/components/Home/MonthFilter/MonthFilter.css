@@ -1,0 +1,32 @@
+.month-filter {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .month-filter label {
+    font-size: 1.1rem;
+    margin-right: 0.5rem;
+  }
+  
+  .month-filter input[type="month"] {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: none;
+    font-size: 1rem;
+  }
+  
+  .month-filter button {
+    padding: 0.5rem 1rem;
+    margin-left: 0.5rem;
+    border: none;
+    background-color: #2575fc;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .month-filter button:hover {
+    background-color: #1a5bcc;
+  }
+  

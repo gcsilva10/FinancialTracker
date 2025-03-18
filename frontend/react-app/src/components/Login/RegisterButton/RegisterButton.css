@@ -1,0 +1,17 @@
+/* src/components/Login/RegisterButton.css */
+.register-button {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background-color: #6a11cb;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .register-button:hover {
+    background-color: #5a0fba;
+  }
+  

@@ -1,205 +1,23 @@
-/* src/components/TransactionList.css */
 .transaction-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 100vh;  /* Garante que cubra toda a tela */
   padding: 2rem;
-  max-width: 1200px;
-  margin: 2rem auto;
-  font-family: Arial, sans-serif;
   background: linear-gradient(135deg, #6a11cb, #2575fc);
-  border-radius: 8px;
   color: #fff;
+  box-sizing: border-box; /* Evita problemas de layout */
 }
 
 .transaction-container h1 {
+  font-size: 2.5rem;
   text-align: center;
   margin-bottom: 1.5rem;
+  padding-top: 3rem;
   color: #fff;
-}
-
-.filter-controls {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-}
-
-.filter-controls span {
-  font-weight: bold;
-}
-
-.filter-controls button {
-  padding: 0.5rem 1rem;
-  border: none;
-  background-color: #2575fc;
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.filter-controls button:hover {
-  background-color: #1a5bcc;
-}
-
-.filter-controls input {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.transaction-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: #fff;
-  color: #333;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-.transaction-table thead {
-  background-color: #2575fc;
-  color: #fff;
-}
-
-.transaction-table th, 
-.transaction-table td {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  text-align: left;
-  font-size: 0.95rem;
-}
-
-.transaction-table th {
-  cursor: pointer;
-}
-
-.transaction-table tbody tr {
-  transition: background-color 0.3s ease;
-}
-
-.transaction-table tbody tr:hover {
-  filter: brightness(1.1);
-}
-
-.transaction-table tbody tr.income {
-  background-color: rgba(50,205,50,0.2);
-}
-.transaction-table tbody tr.income:hover {
-  background-color: #fff;
-}
-.transaction-table tbody tr.expense {
-  background-color: rgba(255,0,0,0.2);
-}
-.transaction-table tbody tr.expense:hover {
-  background-color: #fff;
-}
-
-.transaction-table tbody tr.income,
-.transaction-table tbody tr.expense {
-  border-left: 4px solid;
-}
-
-.transaction-table tbody tr.income {
-  border-color: #32CD32;
-}
-.transaction-table tbody tr.expense {
-  border-color: #FF0000;
-}
-
-.checkbox-label {
-  position: relative;
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-}
-
-.checkbox-label input {
-  opacity: 0;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  cursor: pointer;
-}
-
-.custom-checkbox {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 24px;
-  height: 24px;
-  border: 2px solid #2575fc;
-  border-radius: 4px;
-  background-color: #fff;
-  transition: transform 0.3s ease;
-}
-
-.checkbox-label input:checked + .custom-checkbox {
-  background-color: #2575fc;
-  transform: scale(1.2);
-  background-image: url('data:image/svg+xml;utf8,<svg fill="white" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M6.173 13.8L1.25 8.877l1.414-1.414 3.51 3.51 6.426-6.426 1.414 1.414z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-.transaction-table tbody td:first-child {
-  text-align: center;
-  width: 50px;
-}
-
-.export-delete-container {
-  text-align: center;
-  margin-top: 1rem;
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.export-button {
-  padding: 0.75rem 1.5rem;
-  background-color: #2575fc;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s;
-}
-
-.export-button:hover {
-  background-color: #1a5bcc;
-}
-
-.import-button {
-  padding: 0.75rem 1.5rem;
-  background-color: #FFA500;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s;
-}
-
-.import-button:hover {
-  background-color: #e69500;
-}
-
-.delete-selected-button {
-  padding: 0.75rem 1.5rem;
-  background-color: #FF0000;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s;
-}
-
-.delete-selected-button:hover {
-  background-color: #CC0000;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .transaction-loading {

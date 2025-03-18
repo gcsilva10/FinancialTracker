@@ -1,11 +1,13 @@
-// src/components/HomePage.js
 import React, { useEffect, useState } from 'react';
-import { Pie, Bar, Line } from 'react-chartjs-2';
-import { 
-  Chart as ChartJS, ArcElement, Tooltip, Legend, 
-  CategoryScale, LinearScale, BarElement, LineElement, PointElement 
-} from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, LineElement, PointElement } from 'chart.js';
 import { useNavigate } from 'react-router-dom';
+import MonthFilter from '../../components/Home/MonthFilter/MonthFilter';
+import StatsCards from '../../components/Home/StatsCards/StatsCards';
+import ChartContainer from '../../components/Home/ChartContainer/ChartContainer';
+import DeleteAccountButton from '../../components/Home/DeleteAccountButton/DeleteAccountButton';
+import PieChart from '../../components/Home/PieChart/PieChart';
+import BarChart from '../../components/Home/BarChart/BarChart';
+import LineChart from '../../components/Home/LineChart/LineChart';
 import './HomePage.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, LineElement, PointElement);
@@ -14,7 +16,7 @@ function HomePage() {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem('token');
-  const [selectedMonthYear, setSelectedMonthYear] = useState(""); // formato "YYYY-MM"
+  const [selectedMonthYear, setSelectedMonthYear] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,7 +47,7 @@ function HomePage() {
     fetchTransactions();
   }, [token, selectedMonthYear]);
 
-  // Calcula os totais
+  // Cálculo dos totais
   let totalIncome = 0;
   let totalExpense = 0;
   transactions.forEach(transaction => {
@@ -58,7 +60,7 @@ function HomePage() {
   });
   const balance = totalIncome - totalExpense;
 
-  // Gráfico de Pizza: Total Income vs Total Expense
+  // Dados para o gráfico de Pizza
   const pieChartData = {
     labels: ['Total Income', 'Total Expense'],
     datasets: [
@@ -70,7 +72,7 @@ function HomePage() {
     ]
   };
 
-  // Gráfico de Barras: Transações por Categoria
+  // Dados para o gráfico de Barras
   const categories = [...new Set(transactions.map(t => t.category))];
   const incomePerCategory = categories.map(cat =>
     transactions
@@ -100,7 +102,7 @@ function HomePage() {
     ]
   };
 
-  // Gráfico de Linha: Evolução do Balanço Acumulado (somente se um mês estiver selecionado)
+  // Dados para o gráfico de Linha (se mês selecionado)
   let lineChartData = null;
   if (selectedMonthYear) {
     const [yearStr, monthStr] = selectedMonthYear.split('-');
@@ -171,101 +173,65 @@ function HomePage() {
 
   return (
     <div className="homepage-container">
-      <h1>HomePage</h1>
-      <h2>Estatísticas Financeiras</h2>
+      <h1>Estatísticas Financeiras</h1>
       
-      <div className="month-filter">
-        <label htmlFor="monthInput">Filtrar por Mês/Ano:</label>
-        <input
-          type="month"
-          id="monthInput"
-          value={selectedMonthYear}
-          onChange={(e) => setSelectedMonthYear(e.target.value)}
-        />
-        <button onClick={() => setSelectedMonthYear("")}>Limpar Filtro</button>
-      </div>
+      <MonthFilter 
+        selectedMonthYear={selectedMonthYear} 
+        setSelectedMonthYear={setSelectedMonthYear} 
+      />
 
-      <div className="stats-cards">
-        <div className={`card balance ${balance < 0 ? 'negative' : ''}`}>
-          <h3>Balanço</h3>
-          <p>{balance.toFixed(2)}</p>
-        </div>
-        <div className="card income">
-          <h3>Total Income</h3>
-          <p>{totalIncome.toFixed(2)}</p>
-        </div>
-        <div className="card expense">
-          <h3>Total Expense</h3>
-          <p>{totalExpense.toFixed(2)}</p>
-        </div>
-      </div>
+      <StatsCards 
+        balance={balance} 
+        totalIncome={totalIncome} 
+        totalExpense={totalExpense} 
+      />
 
-      {/* Renderiza os gráficos apenas se houver alguma transação */}
       {transactions.length > 0 && (
         <div className="charts">
-          <div className="chart-container">
-            <h3>Receitas vs Despesas</h3>
-            <div className="chart-inner">
-              <Pie 
-                data={pieChartData} 
+          <ChartContainer title="Receitas vs Despesas">
+            <PieChart 
+              data={pieChartData} 
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#fff' } } }
+              }} 
+            />
+          </ChartContainer>
+          <ChartContainer title="Transações por Categoria">
+            <BarChart 
+              data={barChartData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#fff' } } },
+                scales: {
+                  x: { ticks: { color: '#fff' } },
+                  y: { ticks: { color: '#fff' } }
+                }
+              }}
+            />
+          </ChartContainer>
+          {selectedMonthYear && lineChartData && (
+            <ChartContainer title="Evolução do Balanço (por dia)">
+              <LineChart 
+                data={lineChartData}
                 options={{
                   responsive: true,
                   maintainAspectRatio: false,
-                  plugins: {
-                    legend: { labels: { color: '#fff' } }
-                  }
-                }} 
-              />
-            </div>
-          </div>
-          <div className="chart-container">
-            <h3>Transações por Categoria</h3>
-            <div className="chart-inner">
-              <Bar 
-                data={barChartData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: { labels: { color: '#fff' } }
-                  },
+                  plugins: { legend: { labels: { color: '#fff' } } },
                   scales: {
                     x: { ticks: { color: '#fff' } },
                     y: { ticks: { color: '#fff' } }
                   }
                 }}
               />
-            </div>
-          </div>
-          {selectedMonthYear && lineChartData && (
-            <div className="chart-container">
-              <h3>Evolução do Balanço (por dia)</h3>
-              <div className="chart-inner">
-                <Line 
-                  data={lineChartData}
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                      legend: { labels: { color: '#fff' } }
-                    },
-                    scales: {
-                      x: { ticks: { color: '#fff' } },
-                      y: { ticks: { color: '#fff' } }
-                    }
-                  }}
-                />
-              </div>
-            </div>
+            </ChartContainer>
           )}
         </div>
       )}
 
-      <div className="delete-account-container">
-        <button className="delete-account-button" onClick={handleDeleteAccount}>
-          Apagar Minha Conta
-        </button>
-      </div>
+      <DeleteAccountButton onDelete={handleDeleteAccount} />
     </div>
   );
 }
